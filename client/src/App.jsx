@@ -1,32 +1,66 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import './App.css'
+import { useState, useEffect } from 'react'
+import axios from 'axios'
+import _ from 'lodash'
+import { formatValue } from './helpers'
+import species from './species'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [selection, setSelection] = useState(species[0])
+  const [data, setData] = useState(null)
+  const [error, setError] = useState(null)
+  const [isLoading, setLoading] = useState(false)
+
+  const fetchSpecies = async () => {
+    try {
+      setLoading(true)
+
+      const response = await axios.get(`//localhost:3001/fish/${selection}`)
+
+      setData(response.data.data[0])
+      setError(null)
+    } catch (error) {
+      setError(error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    fetchSpecies()
+  }, [selection])
 
   return (
-    <div className="App">
+    <div>
+      <h1>Sustainable Seafood</h1>
       <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+        <select
+          value={selection}
+          onChange={(e) => setSelection(e.target.value)}
+        >
+          {species.map((each) => (
+            <option key={each} value={each}>
+              {_.startCase(each)}
+            </option>
+          ))}
+        </select>
+        <br />
+        {isLoading ? (
+          <p>Loading...</p>
+        ) : error ? (
+          <p>Error: {error.message}</p>
+        ) : data ? (
+          <dl>
+            {Object.entries(data)
+              .filter(([key, value]) => !_.isNil(value))
+              .map(([key, value]) => [
+                <dt key={key}>
+                  <strong>{key}</strong>
+                </dt>,
+                <dd key={`${key}-value`}>{formatValue(key, value)}</dd>,
+              ])}
+          </dl>
+        ) : null}
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </div>
   )
 }

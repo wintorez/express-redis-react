@@ -2,13 +2,13 @@ FROM node:16-alpine
 
 WORKDIR /app
 
-COPY . .
+COPY package.json package-lock.json ./
 
 RUN npm ci --omit=dev
 
-RUN npm run build -w client
+COPY . .
 
-EXPOSE 3000
+ENV NODE_ENV production
 
 EXPOSE 3001
 
