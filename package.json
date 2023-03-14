@@ -1,0 +1,16 @@
+{
+  "name": "express-redis-react",
+  "version": "1.0.0",
+  "description": "A simple full-stack application using Express.js, Redis, and React.js",
+  "workspaces": [
+    "client",
+    "server"
+  ],
+  "scripts": {
+    "dev": "concurrently --kill-others \"npm run dev -w client\" \"npm run dev -w server\""
+  },
+  "devDependencies": {
+    "concurrently": "^7.6.0",
+    "prettier": "^2.8.4"
+  }
+}
