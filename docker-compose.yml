@@ -1,0 +1,15 @@
+version: '3.9'
+
+services:
+  cache_server:
+    container_name: cache_server
+    image: 'redis:alpine'
+    ports:
+      - '6379:6379'
+
+  web_server:
+    container_name: web_server
+    build: .
+    ports:
+      - '3000:3000'
+      - '3001:3001'

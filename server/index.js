@@ -1,5 +1,5 @@
-const express = require("express")
-const axios = require("axios")
+const express = require('express')
+const axios = require('axios')
 
 const app = express()
 const port = process.env.PORT || 3001
@@ -13,7 +13,7 @@ async function getSpeciesData(req, res) {
       .then((r) => r.data)
 
     if (results.length === 0) {
-      throw new Error("API returned an empty array!")
+      throw new Error('API returned an empty array!')
     }
 
     res.send({
@@ -21,12 +21,12 @@ async function getSpeciesData(req, res) {
       data: results,
     })
   } catch (error) {
-    res.status(404).send("Data unavailable!")
+    res.status(404).send('Data unavailable!')
   }
 }
 
-app.get("/fish/:species", getSpeciesData)
+app.get('/fish/:species', getSpeciesData)
 
-app.listen(port, () => {
+app.listen(port, '0.0.0.0', () => {
   console.log(`Server listening on port ${port}`)
 })

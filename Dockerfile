@@ -2,14 +2,14 @@ FROM node:16-alpine
 
 WORKDIR /app
 
-COPY package.json package-lock.json ./
-
-COPY client server ./
+COPY . .
 
 RUN npm ci --omit=dev
 
-COPY . .
+RUN npm run build -w client
 
 EXPOSE 3000
 
-CMD ["node", "index.js"]
+EXPOSE 3001
+
+CMD ["npm", "start"]
